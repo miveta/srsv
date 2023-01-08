@@ -13,7 +13,7 @@ public class Main {
         startTime = (int) System.currentTimeMillis();
 
         Input[] inputs = get40inputs();
-        int K = 5;
+        int K = 2;
 
         // Start the managing thread
         ManagingThread managing = new ManagingThread(inputs);
