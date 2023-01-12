@@ -11,6 +11,13 @@ public class ManagingThread implements Runnable {
 
     @Override
     public void run() {
+        // Pričekaj početak rada ulaza "i"
+        try {
+            Thread.sleep(input.getFirstAppearance() + 100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         while (Main.running.get()) {
             for (int i = 0; i < numberOfInputs; i++) {
                 int state = inputs[i].getState(); // Dohvati stanje ulaza
@@ -22,6 +29,17 @@ public class ManagingThread implements Runnable {
                     inputs[i].setLastResponse(state); // Postavi odgovor i trenutak zadnjeg odgovora
                     // (automatski u klasi Input)
                     lastStates[i] = state; // Ažuriraj zadnje stanje
+
+                    // pricekaj pocetak sljedece periode
+                    long timeToSleep = input.getPeriod() - input.getRelativeTime() % input.getPeriod();
+                    // cekaj periodu
+                    // long timeToSleep = input.getPeriod();
+                    // System.err.println("Period = " + input.getPeriod() + "TTS = " + timeToSleep);
+                    try {
+                        Thread.sleep(timeToSleep);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
 
                     System.out.println("[" + Main.getRelativeTime() + "] upr: ulaz:" + (i + 1) + " kraj obrade, postavljeno " + state);
                 } else {
